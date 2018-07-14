@@ -15,7 +15,7 @@ cache:
 
 before_install:
   - composer config --global github-oauth.github.com "$GITHUB_TOKEN"
-  - composer global require squizlabs/php_codesniffer --no-suggest
+  #- composer global require squizlabs/php_codesniffer --no-suggest
 
 install:
   #- travis_retry composer self-update && composer --version
