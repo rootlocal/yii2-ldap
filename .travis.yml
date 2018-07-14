@@ -1,0 +1,70 @@
+language: php
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+    - vendor/
+
+before_install:
+  - composer config --global github-oauth.github.com "$GITHUB_TOKEN"
+  - composer global require squizlabs/php_codesniffer --no-suggest
+
+install:
+  #- travis_retry composer self-update && composer --version
+  #- travis_retry composer global require "fxp/composer-asset-plugin:~1.3"
+  #- export PATH="$HOME/.composer/vendor/bin:$PATH"
+  #- travis_retry composer install --dev --prefer-dist --no-interaction
+  #- travis_retry composer global require "codeception/codeception=2.0.*" "codeception/specify=*" "codeception/verify=*"
+  #- |
+  #  cd tests
+  #  codecept build
+  #  cd ..
+
+before_script:
+  - pear config-set preferred_state beta
+  - pecl channel-update pecl.php.net
+  - php -m
+  - 'export PATH="${PATH}:${HOME}/.composer/vendor/bin"'
+  - phpenv config-add tests/travis/enable-ldap.ini
+  - cat tests/ldapconfig.ini.dist | sed s/389/3389/ > tests/ldapconfig.ini
+  - mkdir /tmp/slapd
+  - slapd -f tests/ldif_data/slapd.conf -h ldap://localhost:3389 &
+  - sleep 3
+  - ldapadd -h localhost:3389 -D cn=admin,dc=example,dc=com -w test -f tests/ldif_data/base.ldif
+  - ldapadd -h localhost:3389 -D cn=admin,dc=example,dc=com -w test -f tests/ldif_data/INITIAL_TESTDATA.ldif
+
+script:
+  #- |
+  #  chmod -R 0777 tests/runtime
+  #  cd tests/web
+  #  chmod -R 0777 assets
+  #  php -S localhost:8080 > /dev/null 2>&1 &
+  #  cd ..
+  #  codecept run --coverage --coverage-xml
+  #  cd ..
+
+after_script:
+  #- vendor/bin/test-reporter --coverage-report=tests/codeception/_output/coverage.xml
+
+env:
+  global:
+    secure:
+      LBL01TZNlGlDtVWiD3VGHW8ferU5ScKl75s1Dlr1vUoTNm/TC4KW4pi8gcPDP4FR3dChqCM13JMCa1ENeNKx0jhf2GwJbfj9CA636ye1ONwaUAy0bjiDR0DqEr8V5oCCc/Uy7+hV17nXA5FePfOHlwnGcvaq+j1TYCzyuAAQjpPjlfglSt2UwXGYgY2t44yGl4LvxCUUAEd2FRTFXfRHz89MTLUW86ma6eCdCO8Cn+Q3pmEnUfYXRV2sIW9UYBaUti83U2BcLwHA4hQQtbAlCtCWsIVN+1epkOWDQcna0KWNVvgRf6w36+ED5N179eFHbSkfnsi7RY6TuYP562X4h290XmQ0d2WQEKLIIgkvvjcAPRbj/6SltP6u37kqgC4dT7uRWNZp5IkMLTG8VU3lQIAsMhWOjIh6hY69TLJSK88lY9ypTZD4jeFqoyciZl0T7hEz3oQAylLqvTvXmg4rRwod1zDRgT6+s/LXtID11XR6qJEp592GcgteuqRHg/BCpq+Sk3XNFzE0McTjddldRUfCoy/CcwtKeFuCNXH5FMEh6rvKRkATsevH2pnrxEOlk1/RQLFYwqGEWr+aeMDzjmWIsWel/7Ad/f++PZfKkL8x8POs+hPpXuDkdMxmyFMhamoPW6GbQw9BMCn39Bef69kAukXHMlZZJcTFspTjzbo=
+
+addons:
+  apt:
+    packages:
+      - ldap-utils
+      - slapd
+  code_climate:
+    repo_token:
+      secure:
+        aIvRPPpnAAvDPjTdROWtVoIvSfGZbR2s/Eks+XOcELIDKZmyNxsEyhmoIzIe8xyrGtxUE8/DDmvRqnCjAq7/kTsJZdrCbfZXnAUEAN1rafZOdXv7M92TBKM3f6OqFlNTuVf9dh/nS9XHWR2Aqj0MyR+Cs5Cl1B6p492QqpmOqCspkUl4aM6x0LY8yE1CGgi81+0UI837PctSKUk/th+zNhWfYfhFT8ezXm71+scr4DAafH91jUr/5XVywjxkCxJYOjZhlzeDZGmxjDllVju1xcVK6i5J75jNoDxdC8CS1cNUzJH+CZOn2w8AuWpHs4YsWjw8sA3IZArMBXzKIJsJDq4QFEeY2QkiayyDYa1+9zfEBRlKnmDiIdLxxlvSqEMOKjFQMKjUgR+fwx5Vr8FbU0/+Dgt4e6JG3kyMvmbzaFBnJRilhCHMYyUZSiTt3xAkC+q79LPQb5WDcc5kAmo7PRCuehbMdWtGoofRxdHIoAg4yhV/rBu0gEqae59+DdwXjA7y6hoC1p/IpfwiE5o16XjnP3RmEEvdFk92m7eB2JbKGmgLzGXGsVEzjSFneLBYZ42VYXAcXm89cI5d6bo9P2hNUhy7tRFRdAkpVYe9j1Pn9Gp1uQ3vqkv38uC4wHZ9eH57UDZw/jrXUK6Tt/Bzg8kcR2lJP0MGR6AGJgC4uOo=
