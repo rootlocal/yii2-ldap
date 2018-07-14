@@ -1,7 +1,7 @@
 yii2-ldap extension
 ===================
-yii2-ldap extension
-
+yii2-ldap extension  
+[![Build Status](https://travis-ci.org/rootlocal/yii2-ldap.svg?branch=master)](https://travis-ci.org/rootlocal/yii2-ldap)  
 Installation
 ------------
 
