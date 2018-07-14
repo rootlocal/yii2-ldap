@@ -35,7 +35,7 @@ before_script:
   - 'export PATH="${PATH}:${HOME}/.composer/vendor/bin"'
   - cat tests/ldapconfig.ini.dist | sed s/389/3389/ > tests/ldapconfig.ini
   - mkdir /tmp/slapd
-  - slapd -f tests/ldif_data/slapd.conf -h ldap://localhost:3389 &
+  - slapd -f tests/ldif_data/slapd_linux.conf -h ldap://localhost:3389 &
   - sleep 3
   - ldapadd -h localhost:3389 -D cn=admin,dc=example,dc=com -w test -f tests/ldif_data/base.ldif
   - ldapadd -h localhost:3389 -D cn=admin,dc=example,dc=com -w test -f tests/ldif_data/INITIAL_TESTDATA.ldif
