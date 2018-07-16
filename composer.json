@@ -21,7 +21,8 @@
   },
   "require-dev": {
     "yiisoft/yii2-codeception": "~2.0",
-    "codeclimate/php-test-reporter": "^0.4.4"
+    "codeclimate/php-test-reporter": "^0.4.4",
+    "symfony/var-dumper": "^3.4"
   },
   "autoload": {
     "psr-4": {

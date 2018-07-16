@@ -2,6 +2,12 @@
 
 dn: dc=example,dc=com
 objectClass: dcObject
+objectClass: organization
+objectClass: top
+dc: example
+o: example
+#ou: Test
+
+dn: ou=addressbook,dc=example,dc=com
 objectClass: organizationalUnit
-#dc: test
-ou: Test
+objectClass: top

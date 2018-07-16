@@ -2,6 +2,7 @@
 
 namespace rootlocal\ldap;
 
+use rootlocal\ldap\Schemas\OpenLDAP;
 use yii\base\Component;
 use Adldap\Adldap;
 use Adldap\Auth\BindException;
@@ -64,7 +65,12 @@ class Ldap extends Component
     public function __construct(array $config = [])
     {
         parent::__construct($config);
-        $this->_adLdap = $this->getAdLdap()->addProvider($config, $this->providerName, $this->getConnection());
+        $this->_adLdap = $this->getAdLdap()->addProvider(
+            $config,
+            $this->providerName,
+            $this->getConnection(),
+            OpenLDAP::getInstance()
+        );
     }
 
     /**
@@ -95,11 +101,9 @@ class Ldap extends Component
     {
         try {
             $provider = $this->_adLdap->connect();
-
             return $provider;
         } catch (BindException $e) {
-
-            throw new Exception($e->getMessage(), $e->getCode());
+            throw new Exception($e->getTrace(), $e->getCode());
         }
     }
 }
