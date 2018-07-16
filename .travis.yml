@@ -14,7 +14,7 @@ cache:
 
 before_install:
   - composer config --global github-oauth.github.com "$GITHUB_TOKEN"
-  #- composer global require squizlabs/php_codesniffer --no-suggest
+  - composer global require squizlabs/php_codesniffer --no-suggest
 
 install:
   - composer --version
@@ -30,7 +30,7 @@ install:
 before_script:
   - pear config-set preferred_state beta
   - pecl channel-update pecl.php.net
-  - yes | pecl install imagick
+  - yes | if [ ! -n "$(php -m | grep ldap)" ]; then  pecl install ldap; fi;
   - php -m
   - 'export PATH="${PATH}:${HOME}/.composer/vendor/bin"'
   - cat tests/ldapconfig.ini.dist | sed s/389/3389/ > tests/ldapconfig.ini
@@ -51,7 +51,7 @@ script:
     cd ..
 
 after_script:
-  #- vendor/bin/test-reporter --coverage-report=tests/codeception/_output/coverage.xml
+  - vendor/bin/test-reporter --coverage-report=tests/codeception/_output/coverage.xml
 
 env:
   global:
