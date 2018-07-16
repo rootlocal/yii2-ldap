@@ -4,6 +4,7 @@ namespace tests\codeception\unit\components;
 
 use tests\codeception\unit\TestCase;
 use Codeception\Util\Fixtures;
+use Yii;
 
 /**
  * Class LdapTest
@@ -21,7 +22,7 @@ class LdapTest extends TestCase
             $this->markTestSkipped('The ldap extension is not available.');
         }
     }
-    
+
     public function testLdapConnect()
     {
         $hostName = 'ldap://localhost:3389';
@@ -31,6 +32,14 @@ class LdapTest extends TestCase
         ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
         ldap_bind($ldap, $userName, $password);
         $this->assertTrue(ldap_bind($ldap, $userName, $password));
+    }
+
+    public function testLdapSearch()
+    {
+        $search = Yii::$app->ldap->provider->search()
+            ->where('mail', '=', 'te@example.com')
+            ->get();
+        $this->assertTrue(!empty($search));
     }
 
 }
