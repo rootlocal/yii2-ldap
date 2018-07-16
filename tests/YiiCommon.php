@@ -25,7 +25,7 @@ Yii::$container = new yii\di\Container;
 /**
  * Class WebApplication
  * Include only Web application related components here
- * @property image\Image $image
+ * @property \rootlocal\ldap\Ldap $ldap
  */
 class WebApplication extends yii\web\Application
 {
