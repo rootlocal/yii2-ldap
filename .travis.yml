@@ -22,6 +22,7 @@ install:
   - travis_retry composer install --dev --prefer-dist --no-interaction
   - travis_retry composer global require "codeception/codeception=2.0.*" "codeception/specify=*" "codeception/verify=*"
   - travis_retry composer global require "squizlabs/php_codesniffer=*"
+  - travis_retry composer global require "phpunit/php-timer:^1.0.6"
   - |
     cd tests
     codecept build
