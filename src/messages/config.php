@@ -11,8 +11,8 @@
  * template configuration file with detaild description for each parameter.
  */
 return [
-    'sourcePath' => '@image',
-    'messagePath' => '@image/messages',
+    'sourcePath' => '@rootlocal/ldap',
+    'messagePath' => '@rootlocal/ldap/messages',
     'languages' => ['ru-RU'],
     'translator' => 'Yii::t',
     'sort' => true,
