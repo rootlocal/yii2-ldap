@@ -15,8 +15,8 @@
     }
   ],
   "require": {
-    "php": ">=5.4.0",
-    "yiisoft/yii2": "~2.0.0",
+    "php": ">=7.0",
+    "yiisoft/yii2": "~2.0.14",
     "adldap2/adldap2": "~8.1.5"
   },
   "require-dev": {
@@ -31,10 +31,6 @@
   },
   "extra": {
     "bootstrap": "rootlocal\\ldap\\Bootstrap"
-  },
-  "asset-installer-paths": {
-    "npm-asset-library": "vendor/npm",
-    "bower-asset-library": "vendor/bower"
   },
   "repositories": [
     {

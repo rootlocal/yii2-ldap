@@ -1,9 +1,9 @@
 language: php
 
 php:
-  - 5.5
-  - 5.6
   - 7.0
+  - 7.1
+  - 7.2
 
 sudo: false
 
@@ -17,7 +17,7 @@ before_install:
 
 install:
   - composer --version
-  - travis_retry composer global require "fxp/composer-asset-plugin:~1.3"
+  - travis_retry composer global require "fxp/composer-asset-plugin:~1.4"
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - travis_retry composer install --dev --prefer-dist --no-interaction
   - travis_retry composer global require "codeception/codeception=2.0.*" "codeception/specify=*" "codeception/verify=*"
@@ -58,7 +58,7 @@ env:
   global:
     secure:
       Oaoj1V2Cx/jqv3YIDDxV1qlberAkDJIkCzdl4a1aXtskJ6dsaFRJsltmX20XzajZvC7hRQgIYVDiOmZAwSTa717B4rt6QyLNqKJeRL7fOZeQAWf88DgXKyG/XukURlFLhxldIUXo4VMT8iCIFlvWK5LSrRG4D99qzb8ZepE4otvmu1fy67B4AncqYXp9NrrkyDpRyanDYq8zSy9us3tl+dUz1h5sFPjI3Sf0GR9BFcAwezaAhWMoKH5c9YML4oQNJuLsMTcNxYrJ49zqe3c67qqEVckM23+OU0qeuyINTD9vBLB2HNOLEm+J7Zr8ZdKhb3XKpDKeqtowAIA7ccGFGnOn6W4/SEB8iyO7v3xgWYyvdqKjLSzQaUhStfllXDRX+89WXunjo9pH0o1dUSil6/YtB6krDRqlbKwqIlow7pw6tTtO5KslOZqEEblsOT0bAG88njmBu8f6UnlK9uVhaOi2hKGP40Yerao/Y0thiX/A1rCfnn563O86h7B0SpyTKIroqJBkgZqSqgUrufI94cetTxPu039YhBXkK9G9ibP+zXC7IzL4FHO57ExfPRLsQYrPfBK0NQD/qdlWskygBds9Ik780DbQeY/ch3YqdnmscD4JDm3snBTbTYOW8v1Q2Suy5D5CI9PpP349A851oaqHPykmK/TUl8Q05p1rZ7s=
-      
+
 addons:
   apt:
     packages:
