@@ -1,7 +1,7 @@
 {
   "name": "rootlocal/yii2-ldap",
   "description": "yii2-ldap extension",
-  "type": "library",
+  "type": "yii2-extension",
   "keywords": [
     "yii2",
     "extension",
@@ -21,8 +21,7 @@
   },
   "require-dev": {
     "yiisoft/yii2-codeception": "~2.0",
-    "codeclimate/php-test-reporter": "^0.4.4",
-    "symfony/var-dumper": "^3.4"
+    "codeclimate/php-test-reporter": "^0.4.4"
   },
   "autoload": {
     "psr-4": {
