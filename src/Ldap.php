@@ -103,7 +103,7 @@ class Ldap extends Component
             $provider = $this->_adLdap->connect();
             return $provider;
         } catch (BindException $e) {
-            throw new Exception($e->getTrace(), $e->getCode());
+            throw new Exception($e->getMessage(), $e->getCode());
         }
     }
 }
