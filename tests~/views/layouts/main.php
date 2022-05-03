@@ -1,14 +1,12 @@
 <?php
+/**
+ * @var $this \yii\web\View
+ * @var $content string
+ */
 
-use yii\web\View;
 use yii\helpers\Html;
 
-/**
- * @var View $this
- * @var string $content
- */
 ?>
-
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
     <html lang="<?= Yii::$app->language ?>">

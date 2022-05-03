@@ -1,9 +1,9 @@
 language: php
 
 php:
-  - 7.0
-  - 7.1
-  - 7.2
+  - 7.4
+  - 8.0
+  - 8.1
 
 sudo: false
 
@@ -17,41 +17,29 @@ before_install:
 
 install:
   - composer --version
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - travis_retry composer install --dev --prefer-dist --no-interaction
-  - travis_retry composer global require "codeception/codeception=2.0.*" "codeception/specify=*" "codeception/verify=*"
-  - travis_retry composer global require "squizlabs/php_codesniffer=*"
-  - travis_retry composer global require "phpunit/php-timer:^1.0.6"
-  - |
-    cd tests
-    codecept build
-    cd ..
+  #  - travis_retry make composer-update
+  - if [ -d "$HOME/.config/composer/vendor/bin" ]; then export PATH="$HOME/.config/composer/vendor/bin:$PATH"; fi
+  - if [ -d "$HOME/.composer/vendor/bin" ]; then export PATH="$HOME/.composer/vendor/bin:$PATH"; fi
+#  - |
+#    cd tests
+#    codecept build
+#    cd ..
 
 before_script:
   - pear config-set preferred_state beta
   - pecl channel-update pecl.php.net
   - yes | if [ ! -n "$(php -m | grep ldap)" ]; then  pecl install ldap; fi;
   - php -m
-  - 'export PATH="${PATH}:${HOME}/.composer/vendor/bin"'
-  - cat tests/ldapconfig.ini.dist | sed s/389/3389/ > tests/ldapconfig.ini
-  - mkdir /tmp/slapd
-  - slapd -f tests/ldif_data/slapd_linux.conf -h ldap://localhost:3389 &
-  - sleep 3
-  - ldapadd -h localhost:3389 -D cn=admin,dc=example,dc=com -w test -f tests/ldif_data/base.ldif
-  - ldapadd -h localhost:3389 -D cn=admin,dc=example,dc=com -w test -f tests/ldif_data/INITIAL_TESTDATA.ldif
+  - make start-ldap
 
 script:
   - |
-    chmod -R 0777 tests/runtime
-    cd tests/web
-    chmod -R 0777 assets
-    php -S localhost:8080 > /dev/null 2>&1 &
-    cd ..
-    codecept run --coverage --coverage-xml
-    cd ..
+    make serve
+    make test
 
-after_script:
-  - vendor/bin/test-reporter --coverage-report=tests/codeception/_output/coverage.xml
+#after_script:
+#  - vendor/bin/test-reporter --coverage-report=tests/codeception/_output/coverage.xml
 
 env:
   global:
@@ -63,6 +51,7 @@ addons:
     packages:
       - ldap-utils
       - slapd
-  code_climate:
-    repo_token:
-      secure: "TtpIg9hi82LISorWNAI5oqcu0M0KR/OBzeNJMumAlUwqWlMq9rHS5RMC1gaKGh6xLSniG28WlD6qkpVe7CpT9CBfwatehgTKPVzmrBFea7onvESE4c8LYxe6vMyQNPM7J0G7wx4e64o4MZ90fw4Nd+ug+ER7EnoW9F00wW9fnRFt4U83+1zDDU7YuOaU5mM1jQr4Jj9N3Itr6oxKdjm4Zkl5SynkrnvTx3doSrL5qbR4+TuYKcV0PoUk5vnGb+JxueAAXy+B77077YZwJiElfrDkKzJwDfiH8YYM0ThZclwWLtyuW8vfTncaFbywBaIERftbDy/pEpKq2S7MCQiVXNeV5yRXO87W0W/SpTczLDZjxkb20FOMIv/UQgq6/Z+OYa9obJmxrCObHeCGWDES+5vzTLavbbe/ZrTeV5fyy7VJWCS0DQ81Z7Fh4v2n3bD0aY0UVDphLjGkwVvcL5AFAByI2VIWzsW/hZSmZNxrYrrgnwOfxn0E0t9XVIVwYUep/Px4Xlz+LCR+1xG3Lg+Fw5+xmixwkCMJTXv5p1CDYoN+Te2tvTYG+5Wk+7+JzZ9vDQkvphaSjojKQTweKPKvp0gDmjZo+LM9A6WGrv6USiqiOIGXru6xiWPKxOUI82b1Bzx8DRONhk+oxrHmVp+copL/ETUxvMu32iobzH9eX20="
+      - make
+#  code_climate:
+#    repo_token:
+#      secure: "TtpIg9hi82LISorWNAI5oqcu0M0KR/OBzeNJMumAlUwqWlMq9rHS5RMC1gaKGh6xLSniG28WlD6qkpVe7CpT9CBfwatehgTKPVzmrBFea7onvESE4c8LYxe6vMyQNPM7J0G7wx4e64o4MZ90fw4Nd+ug+ER7EnoW9F00wW9fnRFt4U83+1zDDU7YuOaU5mM1jQr4Jj9N3Itr6oxKdjm4Zkl5SynkrnvTx3doSrL5qbR4+TuYKcV0PoUk5vnGb+JxueAAXy+B77077YZwJiElfrDkKzJwDfiH8YYM0ThZclwWLtyuW8vfTncaFbywBaIERftbDy/pEpKq2S7MCQiVXNeV5yRXO87W0W/SpTczLDZjxkb20FOMIv/UQgq6/Z+OYa9obJmxrCObHeCGWDES+5vzTLavbbe/ZrTeV5fyy7VJWCS0DQ81Z7Fh4v2n3bD0aY0UVDphLjGkwVvcL5AFAByI2VIWzsW/hZSmZNxrYrrgnwOfxn0E0t9XVIVwYUep/Px4Xlz+LCR+1xG3Lg+Fw5+xmixwkCMJTXv5p1CDYoN+Te2tvTYG+5Wk+7+JzZ9vDQkvphaSjojKQTweKPKvp0gDmjZo+LM9A6WGrv6USiqiOIGXru6xiWPKxOUI82b1Bzx8DRONhk+oxrHmVp+copL/ETUxvMu32iobzH9eX20="

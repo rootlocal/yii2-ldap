@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use yii\web\Controller;
-use yii\web\ErrorAction;
 
 /**
  * Class SiteController
@@ -15,20 +14,21 @@ class SiteController extends Controller
     /**
      * @inheritdoc
      */
-    public function actions(): array
+    public function actions()
     {
         return [
             'error' => [
-                'class' => ErrorAction::class,
+                'class' => 'yii\web\ErrorAction',
             ],
         ];
     }
 
     /**
      * Displays homepage.
+     *
      * @return string
      */
-    public function actionIndex(): string
+    public function actionIndex()
     {
         return $this->render('index');
     }

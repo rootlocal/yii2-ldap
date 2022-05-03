@@ -5,10 +5,12 @@ namespace rootlocal\ldap;
 use yii\base\BootstrapInterface;
 
 /**
- * Class Bootstrap
+ * Class LdapBootstrap
+ *
+ * @author Alexander Zakharov <sys@eml.ru>
  * @package rootlocal\ldap
  */
-class Bootstrap implements BootstrapInterface
+class LdapBootstrap implements BootstrapInterface
 {
     /**
      * @inheritdoc
