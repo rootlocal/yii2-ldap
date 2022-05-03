@@ -2,6 +2,9 @@
 /**
  * Application configuration shared by all test types
  */
+
+use rootlocal\ldap\Ldap;
+
 return [
     'id' => 'image-test',
     'basePath' => dirname(dirname(__DIR__)), // @tests
@@ -9,6 +12,10 @@ return [
     'language' => 'en-US',
 
     'aliases' => [
+        '@tests' => dirname(dirname(__DIR__)),
+        '@assets' => dirname(dirname(__DIR__)) . '/web/assets',
+        '@bower' => '@vendor/bower-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
 
     'modules' => [
@@ -35,12 +42,12 @@ return [
         ],
 
         'ldap' => [
-            'class' => 'rootlocal\ldap\Ldap',
-            'domain_controllers' => ['localhost'],
+            'class' => Ldap::class,
+            'port' => 3389,
             'base_dn' => 'dc=example,dc=com',
+            'domain_controllers' => ['localhost'],
             'admin_username' => 'cn=admin,dc=example,dc=com',
             'admin_password' => 'test',
-            'port' => 3389,
         ],
     ],
 ];

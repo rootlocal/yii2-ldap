@@ -2,60 +2,66 @@
 
 namespace rootlocal\ldap;
 
+use Adldap\Connections\ConnectionInterface;
+use Adldap\Connections\ProviderInterface;
 use rootlocal\ldap\Schemas\OpenLDAP;
 use yii\base\Component;
 use Adldap\Adldap;
-use Adldap\Auth\BindException;
-use yii\base\Exception;
 
 /**
  * Class Ldap
- * @package rootlocal\ldap
  *
- * @property \Adldap\Connections\ProviderInterface $provider
+ * @property-read Connection $connection
+ * @property-read Adldap $adLdap
+ * @property ProviderInterface $provider
+ *
+ * @author Alexander Zakharov <sys@eml.ru>
+ * @package rootlocal\ldap
  */
 class Ldap extends Component
 {
     /**
      * @var array
+     * @deprecated use $hosts
      */
-    public $domain_controllers;
-
+    public array $domain_controllers = [];
     /**
-     * @var string
+     * An array of your LDAP hosts.
+     * You can use either the host name or the IP address of your host.
+     * @var array
      */
-    public $port;
-
+    public array $hosts = [];
+    /** @var int The port to use for connecting to your hosts */
+    public int $port = ConnectionInterface::PORT;
+    /** @var int The LDAP version to utilize */
+    public int $version;
     /**
-     * @var integer
+     * The base distinguished name of your domain to perform searches upon
+     * @var string|null
      */
-    public $version;
-
+    public ?string $base_dn = null;
     /**
-     * @var string
+     * @var string|null
+     * @deprecated use $username
      */
-    public $base_dn;
-
+    public ?string $admin_username = null;
+    /** @var string|null */
+    public ?string $username = null;
     /**
-     * @var string
+     * @var string|null
+     * @deprecated use password
      */
-    public $admin_username;
-
-    /**
-     * @var string
-     */
-    public $admin_password;
-
+    public ?string $admin_password;
+    /** @var string|null */
+    public ?string $password;
     /**
      * The default provider name
      * @var string
      */
-    public $providerName = 'default';
+    public string $providerName = 'default';
 
-    /**
-     * @var Adldap
-     */
-    private $_adLdap;
+    /** @var Adldap|null */
+    private ?Adldap $_adLdap;
 
 
     /**
@@ -65,7 +71,22 @@ class Ldap extends Component
     public function __construct(array $config = [])
     {
         parent::__construct($config);
+
+        if (isset($config['admin_password']) && !empty($config['admin_password'])) {
+            $config['password'] = $config['admin_password'];
+            unset($config['admin_password']);
+        }
+        if (isset($config['admin_username']) && !empty($config['admin_username'])) {
+            $config['username'] = $config['admin_username'];
+            unset($config['admin_username']);
+        }
+        if (isset($config['domain_controllers']) && !empty($config['domain_controllers'])) {
+            $config['hosts'] = $config['domain_controllers'];
+            unset($config['domain_controllers']);
+        }
+
         $this->_adLdap = $this->getAdLdap()->addProvider(
+            /** @see \Adldap\Configuration\DomainConfiguration */
             $config,
             $this->providerName,
             $this->getConnection(),
@@ -88,22 +109,16 @@ class Ldap extends Component
     /**
      * @return Connection
      */
-    public function getConnection()
+    public function getConnection(): Connection
     {
         return Connection::getInstance();
     }
 
     /**
-     * @return \Adldap\Connections\ProviderInterface
-     * @throws Exception
+     * @return ProviderInterface
      */
-    public function getProvider()
+    public function getProvider(): ProviderInterface
     {
-        try {
-            $provider = $this->_adLdap->connect();
-            return $provider;
-        } catch (BindException $e) {
-            throw new Exception($e->getMessage(), $e->getCode());
-        }
+        return $this->_adLdap->connect();
     }
 }
