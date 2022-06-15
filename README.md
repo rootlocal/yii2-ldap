@@ -19,7 +19,7 @@ composer require --prefer-dist rootlocal/yii2-ldap "*"
 or add
 
 ```
-"rootlocal/yii2-ldap": "*"
+"rootlocal/yii2-ldap": "^1.0"
 ```
 
 to the require section of your `composer.json` file.
