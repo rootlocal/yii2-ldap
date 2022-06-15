@@ -1,6 +1,10 @@
 #!/usr/bin/env sh
 
+# debian: apt -y install slapd ldap-utils
+# freebsd: pkg install php81-ldap openldap24-server
+
 testDir=$(dirname $(dirname $(readlink -f "$0")))
+echo "cd ${testDir}"
 cd ${testDir}
 
 add=$(which ldapadd)

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ldap" basedir=".">
+
+    <target name="start-ldap" description="Run Start LDAP">
+        <echo message="Run Start LDAP"/>
+        <!-- start LDAP serve -->
+        <exec executable="bin/slapd_start.sh"
+              dir="${basedir}/tests">
+        </exec>
+
+    </target>
+
+</project>

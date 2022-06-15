@@ -1,0 +1,7 @@
+api/
+code-browser/
+coverage/
+logs/
+pdepend/
+phpdox
+composer.properties.tmp
