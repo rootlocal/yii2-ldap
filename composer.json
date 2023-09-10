@@ -15,23 +15,12 @@
     }
   ],
   "require": {
-    "php": ">=7.4||^8.0||^8.1",
+    "php": ">=7.4||^8.0||^8.1||^8.2",
     "ext-ldap": "*",
     "yiisoft/yii2": "^2.0",
-    "adldap2/adldap2": "^10.4"
+    "adldap2/adldap2": "^10.5"
   },
   "require-dev": {
-    "codeception/codeception": "^4.1",
-    "codeception/module-phpbrowser": "^1.0",
-    "codeception/module-asserts": "^2.0",
-    "codeception/module-yii2": "^1.1",
-    "codeception/module-filesystem": "^1.0",
-    "codeception/verify": "^2.2",
-    "squizlabs/php_codesniffer": "3.*",
-    "phploc/phploc": "^7.0",
-    "pdepend/pdepend": "^2.10",
-    "phpmd/phpmd": "^2.12",
-    "sebastian/phpcpd": "^6.0"
   },
   "config": {
     "allow-plugins": {
